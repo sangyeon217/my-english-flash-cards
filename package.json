@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
+    "compromise": "^14.15.1",
     "drizzle-orm": "^0.45.2",
     "iron-session": "^8.0.4",
     "lucide-react": "^1.21.0",

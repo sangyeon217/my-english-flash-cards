@@ -38,7 +38,7 @@ src/
   components/        # Header, FlashCard, CardForm(추가/수정 공용 모달), ConfirmDialog(삭제 확인), FilterTabs, HighlightedText
   hooks/             # useCards — 목록/CRUD/필터 상태
   lib/
-    highlight.ts     # 예문 단어 강조 (순수 함수)
+    highlight.ts     # 예문 단어 강조 (compromise 로 굴절형 인식)
     storage.ts       # CardRepository 추상화 + apiRepository(/api/cards fetch)
     env.ts           # 환경변수 검증 (zod)
     session.ts       # iron-session 세션
@@ -64,4 +64,4 @@ drizzle.config.ts    # drizzle-kit 설정
 ## 기술 스택
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
-Neon Postgres + Drizzle ORM · iron-session · lucide-react
+Neon Postgres + Drizzle ORM · iron-session · lucide-react · compromise (예문 굴절형 강조)
