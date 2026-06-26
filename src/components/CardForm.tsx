@@ -34,12 +34,9 @@ export function CardForm({ open, initial, onClose, onSubmit }: Props) {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      {/* 입력 내용 유실 방지를 위해 오버레이 클릭으로는 닫지 않는다. */}
       <form
-        onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
         className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
       >
