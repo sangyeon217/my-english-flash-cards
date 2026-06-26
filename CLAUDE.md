@@ -81,12 +81,18 @@ import 하는 `node test.mjs`.
   `[transform-style:preserve-3d]`, `[transform:rotateY(180deg)]`,
   `[backface-visibility:hidden]`)를 쓴다. 앞면 우상단의 액션 버튼(연필=수정 → `onEdit`,
   휴지통=삭제 → `onRemove`)은 모두 `e.stopPropagation()` 을 호출해 플립이 트리거되지 않게 한다.
+  두 콜백 모두 `Card` 를 통째로 넘긴다 — 홈 페이지는 이를 받아 즉시 수행하지 않고
+  수정/삭제 모달의 대상 state 로 보관한다.
 
 - **`src/components/CardForm.tsx`** — 단어 추가/수정 공용 모달. `initial` prop 이 있으면 수정
   모드(제목·버튼·초기값이 바뀜), 없으면 추가 모드. 홈 페이지가 추가용·수정용 두 인스턴스를
   렌더하며, 모달이 열릴 때마다 `key` 로 remount 해 입력 상태를 초기화/재시드한다. 제출은
   `CardInput`(word/meaning/example)을 그대로 `addCard`/`editCard` 콜백에 넘긴다. 수정 PATCH 는
   Route Handler 의 `sanitizePatch` 가 동일 필드를 이미 허용한다.
+
+- **`src/components/ConfirmDialog.tsx`** — 위험한 동작 확인용 공용 모달(`CardForm` 과 동일한
+  오버레이 스타일, 빨간 confirm 버튼). 홈 페이지의 삭제 흐름이 사용한다: 휴지통 클릭은 바로
+  지우지 않고 `deleting` state 만 채우며, 모달의 "삭제" 를 눌러야 `removeCard` 가 호출된다.
 
 ## 컨벤션
 

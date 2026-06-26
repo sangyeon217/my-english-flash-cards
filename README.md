@@ -35,7 +35,7 @@ src/
     login/          # 비밀번호 로그인 페이지
     api/            # Route Handlers: cards, cards/[id], login, logout
     icon.svg        # favicon (브랜드 마크) — Header 의 BrandMark 와 동일 디자인
-  components/        # Header, FlashCard, CardForm(추가/수정 공용 모달), FilterTabs, HighlightedText
+  components/        # Header, FlashCard, CardForm(추가/수정 공용 모달), ConfirmDialog(삭제 확인), FilterTabs, HighlightedText
   hooks/             # useCards — 목록/CRUD/필터 상태
   lib/
     highlight.ts     # 예문 단어 강조 (순수 함수)

@@ -8,7 +8,7 @@ interface Props {
   card: Card;
   onToggleStatus: (id: string) => void;
   onEdit: (card: Card) => void;
-  onRemove: (id: string) => void;
+  onRemove: (card: Card) => void;
 }
 
 // 앞면: 단어 + (강조된) 예문 / 뒷면: 뜻. 클릭하면 3D 뒤집힘.
@@ -48,7 +48,7 @@ export function FlashCard({ card, onToggleStatus, onEdit, onRemove }: Props) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onRemove(card.id);
+                  onRemove(card);
                 }}
                 aria-label="삭제"
                 className="rounded-md p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"

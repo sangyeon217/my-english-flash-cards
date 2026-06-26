@@ -6,6 +6,7 @@ import { useCards } from "@/hooks/useCards";
 import { FlashCard } from "@/components/FlashCard";
 import { FilterTabs } from "@/components/FilterTabs";
 import { CardForm } from "@/components/CardForm";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 export default function Home() {
   const {
@@ -21,6 +22,7 @@ export default function Home() {
   } = useCards();
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Card | null>(null);
+  const [deleting, setDeleting] = useState<Card | null>(null);
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8">
@@ -46,7 +48,7 @@ export default function Home() {
               card={card}
               onToggleStatus={toggleStatus}
               onEdit={setEditing}
-              onRemove={removeCard}
+              onRemove={setDeleting}
             />
           ))}
         </div>
@@ -75,6 +77,23 @@ export default function Home() {
         }
         onClose={() => setEditing(null)}
         onSubmit={(input) => editCard(editing!.id, input)}
+      />
+
+      {/* 삭제 확인 모달 — 확인을 눌러야 실제로 삭제한다. */}
+      <ConfirmDialog
+        open={deleting != null}
+        title="정말 삭제하시겠습니까?"
+        message={
+          deleting
+            ? `"${deleting.word}" 단어를 삭제합니다. 이 동작은 되돌릴 수 없습니다.`
+            : undefined
+        }
+        confirmLabel="삭제"
+        onConfirm={() => {
+          if (deleting) removeCard(deleting.id);
+          setDeleting(null);
+        }}
+        onClose={() => setDeleting(null)}
       />
     </main>
   );
