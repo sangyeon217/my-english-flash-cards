@@ -2,7 +2,7 @@ import type { Card } from "@/types/card";
 
 // 카드 저장소 추상화 계층.
 // 모든 메서드는 Promise 를 반환한다. 구현체는 Route Handler(/api/cards)를 통해
-// DB 에 접근하는 apiRepository 다. (이전 localStorage 구현은 DB 연동으로 대체됨)
+// DB 에 접근하는 apiRepository 다.
 
 export interface CardInput {
   word: string;
