@@ -26,11 +26,23 @@ export function FlashCard({ card, onToggleStatus, onRemove }: Props) {
         {/* ---------- 앞면: 단어 + 예문 ---------- */}
         <div className="absolute inset-0 flex flex-col rounded-xl border border-slate-200 bg-white p-5 [backface-visibility:hidden]">
           <div className="flex items-start justify-between">
-            <StatusToggle
-              memorized={memorized}
-              onToggle={() => onToggleStatus(card.id)}
-            />
-            <span className="text-xs text-slate-400">탭하여 뜻 보기</span>
+            <div className="flex items-baseline gap-2">
+              <StatusToggle
+                memorized={memorized}
+                onToggle={() => onToggleStatus(card.id)}
+              />
+              <span className="text-xs text-slate-400">탭하여 뜻 보기</span>
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove(card.id);
+              }}
+              aria-label="삭제"
+              className="rounded-md p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+            >
+              <TrashIcon />
+            </button>
           </div>
 
           <div className="flex flex-1 flex-col justify-center gap-3">
@@ -41,29 +53,18 @@ export function FlashCard({ card, onToggleStatus, onRemove }: Props) {
               <HighlightedText text={card.example} word={card.word} />
             </p>
           </div>
-
-          <div className="flex items-center justify-end border-t border-slate-100 pt-3">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemove(card.id);
-              }}
-              aria-label="삭제"
-              className="rounded-md px-2 py-1.5 text-xs text-slate-400 transition hover:bg-red-50 hover:text-red-600"
-            >
-              삭제
-            </button>
-          </div>
         </div>
 
         {/* ---------- 뒷면: 뜻 ---------- */}
         <div className="absolute inset-0 flex flex-col rounded-xl border border-slate-200 bg-slate-900 p-5 [backface-visibility:hidden] [transform:rotateY(180deg)]">
           <div className="flex items-start justify-between">
-            <StatusToggle
-              memorized={memorized}
-              onToggle={() => onToggleStatus(card.id)}
-            />
-            <span className="text-xs text-slate-400">탭하여 단어로</span>
+            <div className="flex items-baseline gap-2">
+              <StatusToggle
+                memorized={memorized}
+                onToggle={() => onToggleStatus(card.id)}
+              />
+              <span className="text-xs text-slate-400">탭하여 단어로</span>
+            </div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center text-center">
             <span className="mb-2 text-xs uppercase tracking-wider text-slate-400">
@@ -74,6 +75,29 @@ export function FlashCard({ card, onToggleStatus, onRemove }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+// 삭제 버튼용 휴지통 아이콘 (인라인 SVG — 프로젝트에 아이콘 라이브러리 없음).
+function TrashIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-4 w-4"
+    >
+      <path d="M3 6h18" />
+      <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+    </svg>
   );
 }
 
