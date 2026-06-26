@@ -7,11 +7,12 @@ import { HighlightedText } from "./HighlightedText";
 interface Props {
   card: Card;
   onToggleStatus: (id: string) => void;
+  onEdit: (card: Card) => void;
   onRemove: (id: string) => void;
 }
 
 // 앞면: 단어 + (강조된) 예문 / 뒷면: 뜻. 클릭하면 3D 뒤집힘.
-export function FlashCard({ card, onToggleStatus, onRemove }: Props) {
+export function FlashCard({ card, onToggleStatus, onEdit, onRemove }: Props) {
   const [flipped, setFlipped] = useState(false);
   const memorized = card.status === "memorized";
 
@@ -33,16 +34,28 @@ export function FlashCard({ card, onToggleStatus, onRemove }: Props) {
               />
               <span className="text-xs text-slate-400">탭하여 뜻 보기</span>
             </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemove(card.id);
-              }}
-              aria-label="삭제"
-              className="rounded-md p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
-            >
-              <TrashIcon />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(card);
+                }}
+                aria-label="수정"
+                className="rounded-md p-1.5 text-slate-400 transition hover:bg-blue-50 hover:text-blue-600"
+              >
+                <PencilIcon />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove(card.id);
+                }}
+                aria-label="삭제"
+                className="rounded-md p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+              >
+                <TrashIcon />
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-1 flex-col justify-center gap-3">
@@ -75,6 +88,26 @@ export function FlashCard({ card, onToggleStatus, onRemove }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+// 수정 버튼용 연필 아이콘 (인라인 SVG — 프로젝트에 아이콘 라이브러리 없음).
+function PencilIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-4 w-4"
+    >
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
   );
 }
 

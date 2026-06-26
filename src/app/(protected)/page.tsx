@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import type { Card } from "@/types/card";
 import { useCards } from "@/hooks/useCards";
 import { FlashCard } from "@/components/FlashCard";
 import { FilterTabs } from "@/components/FilterTabs";
-import { AddCardForm } from "@/components/AddCardForm";
+import { CardForm } from "@/components/CardForm";
 
 export default function Home() {
   const {
@@ -14,10 +15,12 @@ export default function Home() {
     setFilter,
     counts,
     addCard,
+    editCard,
     toggleStatus,
     removeCard,
   } = useCards();
   const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<Card | null>(null);
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8">
@@ -42,16 +45,36 @@ export default function Home() {
               key={card.id}
               card={card}
               onToggleStatus={toggleStatus}
+              onEdit={setEditing}
               onRemove={removeCard}
             />
           ))}
         </div>
       )}
 
-      <AddCardForm
+      {/* 추가 모달 — open 토글 시 key 로 remount 해 입력값을 초기화한다. */}
+      <CardForm
+        key={formOpen ? "add-open" : "add-closed"}
         open={formOpen}
         onClose={() => setFormOpen(false)}
-        onAdd={addCard}
+        onSubmit={addCard}
+      />
+
+      {/* 수정 모달 — 대상 카드를 key 로 써서 카드별로 폼을 새로 채운다. */}
+      <CardForm
+        key={editing ? `edit-${editing.id}` : "edit-closed"}
+        open={editing != null}
+        initial={
+          editing
+            ? {
+                word: editing.word,
+                meaning: editing.meaning,
+                example: editing.example,
+              }
+            : undefined
+        }
+        onClose={() => setEditing(null)}
+        onSubmit={(input) => editCard(editing!.id, input)}
       />
     </main>
   );

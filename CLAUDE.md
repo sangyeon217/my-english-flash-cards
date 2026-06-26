@@ -67,7 +67,8 @@ import 하는 `node test.mjs`.
 
 - **`src/hooks/useCards.ts` — 유일한 상태 소유자.** `useEffect` 에서 카드를 로드하고,
   목록 + `learning | memorized | all` 필터(기본 `learning`)를 보유하며, 모든 mutation 을
-  감싼다 (낙관적 React 상태 업데이트 *및* repository 호출). 홈 페이지가 유일한 소비자이고,
+  감싼다 (`addCard / editCard / toggleStatus / removeCard` — 낙관적 React 상태 업데이트
+  *및* repository 호출). 홈 페이지가 유일한 소비자이고,
   그 아래 컴포넌트들은 표현용이며 콜백을 받는다.
 
 - **`src/lib/highlight.ts` + `HighlightedText.tsx` — 단어 강조.** `splitByWord`(순수,
@@ -78,8 +79,14 @@ import 하는 `node test.mjs`.
 - **`src/components/FlashCard.tsx`** — 클릭 시 앞면(단어 + 강조 예문) ↔ 뒷면(뜻) 뒤집힘.
   3D 플립은 커스텀 유틸리티가 아니라 **Tailwind v4 arbitrary CSS**(`[perspective:1000px]`,
   `[transform-style:preserve-3d]`, `[transform:rotateY(180deg)]`,
-  `[backface-visibility:hidden]`)를 쓴다. 카드 내부 액션 버튼은 `e.stopPropagation()` 을
-  호출해 플립이 트리거되지 않게 한다.
+  `[backface-visibility:hidden]`)를 쓴다. 앞면 우상단의 액션 버튼(연필=수정 → `onEdit`,
+  휴지통=삭제 → `onRemove`)은 모두 `e.stopPropagation()` 을 호출해 플립이 트리거되지 않게 한다.
+
+- **`src/components/CardForm.tsx`** — 단어 추가/수정 공용 모달. `initial` prop 이 있으면 수정
+  모드(제목·버튼·초기값이 바뀜), 없으면 추가 모드. 홈 페이지가 추가용·수정용 두 인스턴스를
+  렌더하며, 모달이 열릴 때마다 `key` 로 remount 해 입력 상태를 초기화/재시드한다. 제출은
+  `CardInput`(word/meaning/example)을 그대로 `addCard`/`editCard` 콜백에 넘긴다. 수정 PATCH 는
+  Route Handler 의 `sanitizePatch` 가 동일 필드를 이미 허용한다.
 
 ## 컨벤션
 

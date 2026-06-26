@@ -6,33 +6,30 @@ import { HighlightedText } from "./HighlightedText";
 
 interface Props {
   open: boolean;
+  // 값이 있으면 수정 모드, 없으면 추가 모드.
+  initial?: CardInput;
   onClose: () => void;
-  onAdd: (input: CardInput) => Promise<void>;
+  onSubmit: (input: CardInput) => Promise<void>;
 }
 
-export function AddCardForm({ open, onClose, onAdd }: Props) {
-  const [word, setWord] = useState("");
-  const [meaning, setMeaning] = useState("");
-  const [example, setExample] = useState("");
+// 단어 추가/수정 공용 모달. initial 이 주어지면 수정 모드로 동작한다.
+export function CardForm({ open, initial, onClose, onSubmit }: Props) {
+  const editing = initial != null;
+  const [word, setWord] = useState(initial?.word ?? "");
+  const [meaning, setMeaning] = useState(initial?.meaning ?? "");
+  const [example, setExample] = useState(initial?.example ?? "");
   const [submitting, setSubmitting] = useState(false);
 
   if (!open) return null;
 
   const valid = word.trim() && meaning.trim() && example.trim();
 
-  const reset = () => {
-    setWord("");
-    setMeaning("");
-    setExample("");
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!valid || submitting) return;
     setSubmitting(true);
-    await onAdd({ word, meaning, example });
+    await onSubmit({ word, meaning, example });
     setSubmitting(false);
-    reset();
     onClose();
   };
 
@@ -46,7 +43,9 @@ export function AddCardForm({ open, onClose, onAdd }: Props) {
         onSubmit={handleSubmit}
         className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
       >
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">단어 추가</h2>
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+          {editing ? "단어 수정" : "단어 추가"}
+        </h2>
 
         <Field label="영어 단어">
           <input
@@ -98,7 +97,7 @@ export function AddCardForm({ open, onClose, onAdd }: Props) {
             disabled={!valid || submitting}
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            추가
+            {editing ? "저장" : "추가"}
           </button>
         </div>
       </form>

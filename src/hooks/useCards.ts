@@ -36,6 +36,13 @@ export function useCards() {
     setCards((prev) => [card, ...prev]);
   }, []);
 
+  const editCard = useCallback(async (id: string, input: CardInput) => {
+    setCards((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, ...input } : c)),
+    );
+    await repository.update(id, input);
+  }, []);
+
   const toggleStatus = useCallback(
     async (id: string) => {
       const card = cards.find((c) => c.id === id);
@@ -76,6 +83,7 @@ export function useCards() {
     setFilter,
     counts,
     addCard,
+    editCard,
     toggleStatus,
     removeCard,
   };
