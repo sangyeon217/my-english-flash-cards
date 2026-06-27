@@ -57,15 +57,30 @@ export function useCards() {
     [cards],
   );
 
+  const toggleFavorite = useCallback(
+    async (id: string) => {
+      const card = cards.find((c) => c.id === id);
+      if (!card) return;
+      const favorite = !card.favorite;
+      setCards((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, favorite } : c)),
+      );
+      await repository.update(id, { favorite });
+    },
+    [cards],
+  );
+
   const removeCard = useCallback(async (id: string) => {
     setCards((prev) => prev.filter((c) => c.id !== id));
     await repository.remove(id);
   }, []);
 
-  const filtered = useMemo(
-    () => (filter === "all" ? cards : cards.filter((c) => c.status === filter)),
-    [cards, filter],
-  );
+  const filtered = useMemo(() => {
+    const list = filter === "all" ? cards : cards.filter((c) => c.status === filter);
+    // 즐겨찾기를 상단에 우선 정렬한다 (낙관적 토글 후에도 순서를 유지).
+    // 그 안에서는 기존 순서(최신순)를 보존하므로 안정 정렬을 쓴다.
+    return [...list].sort((a, b) => Number(b.favorite) - Number(a.favorite));
+  }, [cards, filter]);
 
   const counts: FilterCounts = useMemo(
     () => ({
@@ -85,6 +100,7 @@ export function useCards() {
     addCard,
     editCard,
     toggleStatus,
+    toggleFavorite,
     removeCard,
   };
 }
