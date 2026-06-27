@@ -40,9 +40,32 @@ export function CardForm({ open, initial, onClose, onSubmit }: Props) {
         onSubmit={handleSubmit}
         className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
       >
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">
-          {editing ? "단어 수정" : "단어 추가"}
-        </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-900">
+            {editing ? "단어 수정" : "단어 추가"}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="닫기"
+            className="-mr-1 rounded-md p-1 text-slate-400 transition hover:text-slate-700"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
 
         <Field label="영어 단어">
           <input
@@ -81,14 +104,7 @@ export function CardForm({ open, initial, onClose, onSubmit }: Props) {
           </div>
         )}
 
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700"
-          >
-            취소
-          </button>
+        <div className="flex justify-end">
           <button
             type="submit"
             disabled={!valid || submitting}
