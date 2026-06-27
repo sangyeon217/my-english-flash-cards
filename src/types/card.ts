@@ -7,5 +7,6 @@ export interface Card {
   meaning: string; // 뜻 (한국어)
   example: string; // 원서에서 인용한 예문
   status: CardStatus;
+  favorite: boolean; // 즐겨찾기 여부 (즐겨찾기는 목록 상단에 우선 정렬)
   createdAt: number; // Date.now()
 }

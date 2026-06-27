@@ -7,12 +7,19 @@ import { HighlightedText } from "./HighlightedText";
 interface Props {
   card: Card;
   onToggleStatus: (id: string) => void;
+  onToggleFavorite: (id: string) => void;
   onEdit: (card: Card) => void;
   onRemove: (card: Card) => void;
 }
 
 // 앞면: 단어 + (강조된) 예문 / 뒷면: 뜻. 클릭하면 3D 뒤집힘.
-export function FlashCard({ card, onToggleStatus, onEdit, onRemove }: Props) {
+export function FlashCard({
+  card,
+  onToggleStatus,
+  onToggleFavorite,
+  onEdit,
+  onRemove,
+}: Props) {
   const [flipped, setFlipped] = useState(false);
   const memorized = card.status === "memorized";
 
@@ -35,6 +42,21 @@ export function FlashCard({ card, onToggleStatus, onEdit, onRemove }: Props) {
               <span className="text-xs text-slate-400">탭하여 뜻 보기</span>
             </div>
             <div className="flex items-center gap-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleFavorite(card.id);
+                }}
+                aria-label={card.favorite ? "즐겨찾기 해제" : "즐겨찾기"}
+                aria-pressed={card.favorite}
+                className={`rounded-md p-1.5 transition ${
+                  card.favorite
+                    ? "text-amber-400 hover:bg-amber-50"
+                    : "text-slate-400 hover:bg-amber-50 hover:text-amber-400"
+                }`}
+              >
+                <StarIcon filled={card.favorite} />
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -88,6 +110,25 @@ export function FlashCard({ card, onToggleStatus, onEdit, onRemove }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+// 즐겨찾기 버튼용 별 아이콘. filled 면 채워서(즐겨찾기 상태), 아니면 외곽선만.
+function StarIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill={filled ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-4 w-4"
+    >
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z" />
+    </svg>
   );
 }
 

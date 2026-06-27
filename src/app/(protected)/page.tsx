@@ -18,6 +18,7 @@ export default function Home() {
     addCard,
     editCard,
     toggleStatus,
+    toggleFavorite,
     removeCard,
   } = useCards();
   const [formOpen, setFormOpen] = useState(false);
@@ -47,6 +48,7 @@ export default function Home() {
               key={card.id}
               card={card}
               onToggleStatus={toggleStatus}
+              onToggleFavorite={toggleFavorite}
               onEdit={setEditing}
               onRemove={setDeleting}
             />

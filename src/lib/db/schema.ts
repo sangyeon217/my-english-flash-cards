@@ -1,4 +1,11 @@
-import { pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 // 카드 암기 상태 enum (src/types/card.ts 의 CardStatus 와 동일 집합)
 export const cardStatus = pgEnum("card_status", ["learning", "memorized"]);
@@ -11,6 +18,7 @@ export const cards = pgTable("cards", {
   meaning: text("meaning").notNull(),
   example: text("example").notNull(),
   status: cardStatus("status").notNull().default("learning"),
+  favorite: boolean("favorite").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

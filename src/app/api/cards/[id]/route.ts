@@ -21,6 +21,7 @@ function sanitizePatch(body: unknown): CardUpdate {
     patch.example = src.example.trim();
   if (src.status === "learning" || src.status === "memorized")
     patch.status = src.status;
+  if (typeof src.favorite === "boolean") patch.favorite = src.favorite;
   return patch;
 }
 

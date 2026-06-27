@@ -9,7 +9,7 @@ type Row = typeof cards.$inferSelect;
 
 // DB 가 갱신할 수 있는 필드만 허용 (id/createdAt 제외)
 export type CardUpdate = Partial<
-  Pick<Card, "word" | "meaning" | "example" | "status">
+  Pick<Card, "word" | "meaning" | "example" | "status" | "favorite">
 >;
 
 function toCard(row: Row): Card {
@@ -19,12 +19,17 @@ function toCard(row: Row): Card {
     meaning: row.meaning,
     example: row.example,
     status: row.status,
+    favorite: row.favorite,
     createdAt: row.createdAt.getTime(),
   };
 }
 
 export async function getAllCards(): Promise<Card[]> {
-  const rows = await db.select().from(cards).orderBy(desc(cards.createdAt));
+  // 즐겨찾기를 먼저, 그 안에서는 최신순으로 정렬한다.
+  const rows = await db
+    .select()
+    .from(cards)
+    .orderBy(desc(cards.favorite), desc(cards.createdAt));
   return rows.map(toCard);
 }
 
