@@ -8,7 +8,7 @@
 // .env.local 의 DATABASE_URL 을 사용하며, 결과는 backups/cards-<timestamp>.json 으로
 // 저장된다. 주기 실행(백업 스케줄링)은 로컬 cron/launchd 로 사용자가 설정한다.
 
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, unlink, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { config } from "dotenv";
@@ -72,6 +72,15 @@ try {
   );
 
   console.log(`✅ ${cards.length}개 카드를 backups/${fileName} 에 백업했습니다.`);
+
+  // 새 백업이 안전히 저장된 뒤에만 이전 백업 파일을 정리한다(최신 1개만 유지).
+  const stale = (await readdir(dir)).filter(
+    (f) => f !== fileName && /^cards-\d{8}-\d{6}\.json$/.test(f),
+  );
+  await Promise.all(stale.map((f) => unlink(join(dir, f))));
+  if (stale.length > 0) {
+    console.log(`🧹 이전 백업 ${stale.length}개를 삭제했습니다.`);
+  }
 } catch (err) {
   console.error("❌ 백업 실패:", err);
   process.exit(1);
