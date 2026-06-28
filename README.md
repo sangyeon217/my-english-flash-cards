@@ -5,7 +5,8 @@
 - **앞면**: 단어 + 예문 (예문 속 단어는 자동 강조)
 - **뒷면**: 뜻 (카드를 클릭하면 뒤집힘)
 - **상태**: `암기중` / `암기완료` — 기본은 암기중만 표시, 필터로 전환
-- 단어 추가/삭제, 상태 토글 지원
+- **발음**: 스피커 버튼으로 단어를 영어 음성으로 읽어줌 (브라우저 내장 Web Speech API)
+- 단어 추가/삭제, 상태 토글, 즐겨찾기 지원
 
 ## 실행
 
@@ -39,6 +40,7 @@ src/
   hooks/             # useCards — 목록/CRUD/필터 상태
   lib/
     highlight.ts     # 예문 단어 강조 (compromise 로 굴절형 인식)
+    speech.ts        # 단어 발음 (Web Speech API, client 전용)
     storage.ts       # CardRepository 추상화 + apiRepository(/api/cards fetch)
     env.ts           # 환경변수 검증 (zod)
     session.ts       # iron-session 세션
