@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Card } from "@/types/card";
+import { speak } from "@/lib/speech";
 import { HighlightedText } from "./HighlightedText";
 
 interface Props {
@@ -81,9 +82,21 @@ export function FlashCard({
           </div>
 
           <div className="flex flex-1 flex-col justify-center gap-3">
-            <h3 className="text-2xl font-bold tracking-tight text-slate-900">
-              {card.word}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-2xl font-bold tracking-tight text-slate-900">
+                {card.word}
+              </h3>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  speak(card.word);
+                }}
+                aria-label="발음 듣기"
+                className="rounded-md p-1.5 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-600"
+              >
+                <SpeakerIcon />
+              </button>
+            </div>
             <p className="text-sm leading-relaxed text-slate-600">
               <HighlightedText text={card.example} word={card.word} />
             </p>
@@ -128,6 +141,27 @@ function StarIcon({ filled }: { filled: boolean }) {
       className="h-4 w-4"
     >
       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z" />
+    </svg>
+  );
+}
+
+// 발음 버튼용 스피커 아이콘 (인라인 SVG — 프로젝트에 아이콘 라이브러리 없음).
+function SpeakerIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-4 w-4"
+    >
+      <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
     </svg>
   );
 }
