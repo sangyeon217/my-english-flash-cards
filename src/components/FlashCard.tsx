@@ -83,7 +83,7 @@ export function FlashCard({
 
           <div className="flex flex-1 flex-col justify-center gap-3">
             <div className="flex items-center gap-2">
-              <h3 className="text-2xl font-bold tracking-tight text-slate-900">
+              <h3 className="min-w-0 break-words text-2xl font-bold tracking-tight text-slate-900">
                 {card.word}
               </h3>
               <button
@@ -92,7 +92,7 @@ export function FlashCard({
                   speak(card.word);
                 }}
                 aria-label="발음 듣기"
-                className="rounded-md p-1.5 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-600"
+                className="shrink-0 rounded-md p-1.5 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-600"
               >
                 <SpeakerIcon />
               </button>
